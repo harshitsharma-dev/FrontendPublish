@@ -17,8 +17,32 @@
 </head>
 
 <body>
-    <!-- Navbar will be appended here -->
-    <div></div>
+    <nav class="navbar navbar-expand-lg sticky-navbar" style="background-image: url('../assets/navbar_gradient.jpeg'); background-size: 100% auto; color: #fff; position: relative;">
+        <div class="container-fluid">
+            <img src="../assets/vmart.jpg" height="70" width="70" style="border-radius: 50%; margin-right: 10px;">
+            <a class="navbar-brand" href="/" style="color: #fff;">VJwellers</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <div class="location-info">
+                            <p class="nav-link active">Deliver to <b style="color: yellow;">Vellore, 632014</b></p>
+                            <p class="update-location" onclick="fetchCurrentLocation()">Update Location <img src="../assets/geo-alt-fill.svg" alt="locationpin"></p>
+                        </div>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="margin-right: 10px;">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+                <a href="login.html">
+                    <button class="btn btn-success" type="button" onclick="window.open('login.html', '_blank')">Login/Signin</button>
+                </a>
+            </div>
+        </div>
+    </nav>
 
     <div class="container d-flex flex-wrap justify-content-center">
         <!-- Product cards will be rendered here -->
@@ -44,6 +68,7 @@
         </div>
     </footer>
 
+    <script src="https://fakestoreapi.com/products/category/jewelery"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const location = 'Vellore';
