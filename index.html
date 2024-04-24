@@ -65,7 +65,7 @@
             function Navbar() {
                 const navbar = document.createElement('nav');
                 navbar.className = 'navbar navbar-expand-lg';
-                navbar.style.backgroundImage = "url('../assets/navbar_gradient.jpeg')";
+                navbar.style.backgroundImage = "url('./assets/navbar_gradient.jpeg')";
                 navbar.style.backgroundSize = "100% auto";
                 navbar.style.color = '#fff';
                 navbar.style.position = 'relative';
@@ -75,7 +75,7 @@
                 navbar.appendChild(containerFluid);
             
                 const logoImg = document.createElement('img');
-                logoImg.src = '../assets/vmart.jpg';
+                logoImg.src = './assets/vmart.jpg';
                 logoImg.height = '70';
                 logoImg.width = '70';
                 logoImg.style.borderRadius = '50%';
@@ -136,7 +136,7 @@
                 locationInfo.appendChild(updateLocation);
             
                 const locationPinImg = document.createElement('img');
-                locationPinImg.src = '../assets/geo-alt-fill.svg';
+                locationPinImg.src = './assets/geo-alt-fill.svg';
                 locationPinImg.alt = 'locationpin';
                 updateLocation.insertBefore(locationPinImg, updateLocation.firstChild);
             
