@@ -48,7 +48,7 @@
             function Navbar() {
                 const navbar = document.createElement('nav');
                 navbar.className = 'navbar navbar-expand-lg';
-                navbar.style.backgroundImage = "url('../assets/navbar_gradient.jpeg')";
+                navbar.style.backgroundImage = "url('./assets/navbar_gradient.jpeg')";
                 navbar.style.backgroundSize = "100% auto";
                 navbar.style.color = '#fff';
                 navbar.style.position = 'relative';
@@ -212,7 +212,7 @@
 
                 products.forEach((values) => {
                     const card = document.createElement("a");
-                    card.setAttribute('href', '../vite-deploy/ProductPage.html');
+                    card.setAttribute('href', './ProductPage.html');
                     card.className = "card btn";
                     card.style.width = "18rem";
                     card.style.margin = "2rem";
