@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratings and Reviews</title>
+    <style>
+        /* Ratings.css content */
+        .star-rating {
+            font-size: 36px; /* Increased star size */
+        }
+        .star {
+            cursor: pointer;
+            color: gray;
+            transition: color 0.3s; /* Smooth color transition */
+        }
+        .star.active {
+            color: gold !important; /* Ensuring the gold color overrides the gray */
+        }
+        .average-rating {
+            font-size: 24px; /* Increased average rating font size */
+        }
+        .review-textarea {
+            width: 100%;
+            height: 100px;
+        }
+        .submit-review-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .review {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ratings-and-reviews">
+        <h2 class="section-title" style="font-size: 30px;"><b><u>Ratings</u></b></h2>
+        <div class="star-rating">
+            <span onclick="handleStarClick(1)" class="star">☆</span>
+            <span onclick="handleStarClick(2)" class="star">☆</span>
+            <span onclick="handleStarClick(3)" class="star">☆</span>
+            <span onclick="handleStarClick(4)" class="star">☆</span>
+            <span onclick="handleStarClick(5)" class="star">☆</span>
+        </div>
+        <span class="average-rating">Average Rating: <span id="averageRating">0.0</span></span>
+        <hr />
+        <h2 class="section-title" style="font-size: 30px;"><b><u>Reviews</u></b></h2>
+        <div id="reviewsList">
+            <p>No reviews yet.</p>
+        </div>
+
+        <!-- Add review form -->
+        <hr />
+        <h2 class="section-title"><u>Add a Review</u></h2>
+        <textarea
+            id="reviewTextarea"
+            class="review-textarea"
+            placeholder="Write your review..."
+        ></textarea>
+        <button class="submit-review-btn" onclick="addReview()">Submit Review</button>
+    </div>
+
+    <script>
+        let reviews = [];
+
+        function handleStarClick(newRating) {
+            const review = { rating: newRating };
+            reviews.push(review);
+            updateAverageRating();
+            renderStars(); // To update the star colors
+        }
+
+        function updateAverageRating() {
+            if (reviews.length === 0) {
+                document.getElementById('averageRating').textContent = '0.0';
+                return;
+            }
+
+            const totalRating = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+            const averageRating = (totalRating / reviews.length).toFixed(1);
+            document.getElementById('averageRating').textContent = averageRating;
+            return averageRating; // Return average rating
+        }
+
+        function addReview() {
+            const reviewText = document.getElementById('reviewTextarea').value.trim();
+            if (reviewText !== '') {
+                reviews[reviews.length - 1].text = reviewText; // Add review text to the last added review
+                renderReviews();
+                document.getElementById('reviewTextarea').value = ''; // Clear textarea
+            }
+        }
+
+        function renderStars() {
+            const averageRating = parseFloat(updateAverageRating()); // Parse average rating to float
+            const stars = document.querySelectorAll('.star');
+            
+            stars.forEach((star, index) => {
+                if (index < averageRating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function renderReviews() {
+            const reviewsList = document.getElementById('reviewsList');
+            reviewsList.innerHTML = ''; // Clear previous reviews
+
+            if (reviews.length === 0) {
+                reviewsList.innerHTML = '<p>No reviews yet.</p>';
+                return;
+            }
+
+            reviews.forEach((review, index) => {
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = 'review';
+                reviewDiv.innerHTML = `<p>${review.text}</p>`;
+                reviewsList.appendChild(reviewDiv);
+            });
+        }
+    </script>
+</body>
+</html>
