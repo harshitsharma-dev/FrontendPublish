@@ -9,8 +9,20 @@
 </head>
 
 <body>
-    <iframe type="text/html" data="Navbar.html" style="width: 100%; height: 100px; position: -webkit-sticky;position: sticky;"></object>
+    <div id="navbarContainer" style="width: 100%; height: 100px; position: -webkit-sticky;position: sticky;"></div>
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                fetch('Navbar.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('navbarContainer').innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching Navbar:', error);
+                    });
+            });
+        </script>
     <div class="container d-flex flex-wrap justify-content-center">
         
     </div>
