@@ -32,9 +32,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script src="./login.js"></script>
     <script>
-        function newWindow(){
+        document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.getElementById('loginForm');
+    
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            newWindow();
+        });
+        });
+        
+        function newWindow() {
             window.open("loggedIn.html", "_blank");
-        };
+        }
+
     </script>
 </body>
 </html>
