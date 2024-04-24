@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Display</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .expanded {
+            display: block !important;
+        }
+        
+        .sticky-navbar {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarContainer"></div>
+    <div class="container d-flex flex-wrap justify-content-center" id="productContainer">
+        <!-- Product cards will be rendered here -->
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const location = 'Vellore';
+            const area = '632014';
+
+            function fetchCurrentLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(() => {
+                        setLocation('Vellore');
+                        setArea('632014');
+                    }, (error) => {
+                        console.error('Error getting geolocation:', error.message);
+                    });
+                } else {
+                    console.error('Geolocation is not supported by this browser.');
+                }
+            }
+
+            const navbarContainer = document.getElementById('navbarContainer');
+
+            function Navbar() {
+                const navbar = document.createElement('nav');
+                navbar.className = 'navbar navbar-expand-lg';
+                navbar.style.backgroundImage = "url('../assets/navbar_gradient.jpeg')";
+                navbar.style.backgroundSize = "100% auto";
+                navbar.style.color = '#fff';
+                navbar.style.position = 'relative';
+
+                const containerFluid = document.createElement('div');
+                containerFluid.className = 'container-fluid';
+                navbar.appendChild(containerFluid);
+
+                const logoImg = document.createElement('img');
+                logoImg.src = './assets/vmart.jpg';
+                logoImg.height = '70';
+                logoImg.width = '70';
+                logoImg.style.borderRadius = '50%';
+                logoImg.style.marginRight = '10px';
+                containerFluid.appendChild(logoImg);
+
+                const navbarBrand = document.createElement('a');
+                navbarBrand.className = 'navbar-brand';
+                navbarBrand.href = '/';
+                navbarBrand.textContent = 'VJwellers';
+                navbarBrand.style.color = '#fff';
+                containerFluid.appendChild(navbarBrand);
+
+                const navbarToggler = document.createElement('button');
+                navbarToggler.className = 'navbar-toggler';
+                navbarToggler.type = 'button';
+                navbarToggler.setAttribute('data-bs-toggle', 'collapse');
+                navbarToggler.setAttribute('data-bs-target', '#navbarSupportedContent');
+                navbarToggler.setAttribute('aria-controls', 'navbarSupportedContent');
+                navbarToggler.setAttribute('aria-expanded', 'false');
+                navbarToggler.setAttribute('aria-label', 'Toggle navigation');
+                const navbarTogglerIcon = document.createElement('span');
+                navbarTogglerIcon.className = 'navbar-toggler-icon';
+                navbarToggler.appendChild(navbarTogglerIcon);
+                containerFluid.appendChild(navbarToggler);
+
+                const navbarCollapse = document.createElement('div');
+                navbarCollapse.className = 'collapse navbar-collapse justify-content-between';
+                navbarCollapse.id = 'navbarSupportedContent';
+                containerFluid.appendChild(navbarCollapse);
+
+                const ulNav = document.createElement('ul');
+                ulNav.className = 'navbar-nav me-auto mb-2 mb-lg-0';
+                navbarCollapse.appendChild(ulNav);
+
+                const liNav = document.createElement('li');
+                liNav.className = 'nav-item';
+                ulNav.appendChild(liNav);
+
+                const locationInfo = document.createElement('div');
+                locationInfo.className = 'location-info';
+                liNav.appendChild(locationInfo);
+
+                const locationText = document.createElement('p');
+                locationText.className = 'nav-link active';
+                locationText.textContent = `Deliver to `;
+                locationInfo.appendChild(locationText);
+
+                const locationSpan = document.createElement('b');
+                locationSpan.style.color = 'yellow';
+                locationSpan.textContent = `${location}, ${area}`;
+                locationText.appendChild(locationSpan);
+
+                const updateLocation = document.createElement('p');
+                updateLocation.className = 'update-location';
+                updateLocation.textContent = 'Update Location';
+                updateLocation.onclick = fetchCurrentLocation;
+                locationInfo.appendChild(updateLocation);
+
+                const locationPinImg = document.createElement('img');
+                locationPinImg.src = './assets/geo-alt-fill.svg';
+                locationPinImg.alt = 'locationpin';
+                updateLocation.insertBefore(locationPinImg, updateLocation.firstChild);
+
+                const searchForm = document.createElement('form');
+                searchForm.className = 'd-flex';
+                searchForm.role = 'search';
+                navbarCollapse.appendChild(searchForm);
+
+                const searchInput = document.createElement('input');
+                searchInput.className = 'form-control me-2';
+                searchInput.type = 'search';
+                searchInput.placeholder = 'Search';
+                searchInput.setAttribute('aria-label', 'Search');
+                searchInput.style.marginRight = '10px';
+                searchForm.appendChild(searchInput);
+
+                const searchButton = document.createElement('button');
+                searchButton.className = 'btn btn-outline-light';
+                searchButton.type = 'submit';
+                searchButton.textContent = 'Search';
+                searchForm.appendChild(searchButton);
+
+                const cartLink = document.createElement('a');
+                cartLink.href = 'Cart.html';
+                navbarCollapse.appendChild(cartLink);
+
+                const cartButton = document.createElement('button');
+                cartButton.className = 'btn btn-success';
+                cartButton.type = 'button';
+                cartButton.textContent = 'CART';
+                cartLink.appendChild(cartButton);
+
+                return navbar;
+            }
+
+            navbarContainer.appendChild(Navbar());
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const fake = [];
+
+            const fakestore = async () => {
+                try {
+                    const response = await fetch("https://fakestoreapi.com/products/category/jewelery");
+                    const jsonData = await response.json();
+                    fake.push(...jsonData);
+                    renderProducts(fake);
+                } catch (error) {
+                    console.error('Error fetching products:', error);
+                }
+            };
+
+            const truncateText = (text, maxLength) => {
+                if (text.length <= maxLength) return text;
+                return text.slice(0, maxLength) + '...';
+            };
+
+            const handleReadMore = (event) => {
+                event.preventDefault();
+                const cardBody = event.target.parentNode;
+                const cardText = cardBody.querySelector('.card-text');
+                const fullText = cardText.getAttribute('data-full-text');
+                const isExpanded = cardText.classList.toggle('expanded');
+                if (isExpanded) {
+                    cardText.textContent = fullText;
+                    event.target.textContent = 'Read less';
+                } else {
+                    cardText.textContent = truncateText(fullText, 100);
+                    event.target.textContent = 'Read more';
+                }
+            };
+
+            const handleAddToCart = (event, productId) => {
+                event.preventDefault();
+                // Retrieve existing cart items from localStorage
+                const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+                // Add new product to cart
+                cartItems.push(productId);
+                // Save updated cart items to localStorage
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                // Hide the price button
+                event.target.style.display = 'none';
+            };
+
+            const renderProducts = (products) => {
+                const container = document.getElementById('productContainer');
+                container.innerHTML = ''; // Clear previous content
+
+                products.forEach((values) => {
+                    const card = document.createElement("a");
+                    card.setAttribute('href', '../vite-deploy/ProductPage.html');
+                    card.className = "card btn";
+                    card.style.width = "18rem";
+                    card.style.margin = "2rem";
+                    card.style.textDecoration = 'none';
+                    card.style.position = 'relative';
+
+                    const img = document.createElement("img");
+                    img.src = values.image;
+                    img.className = "card-img-top";
+                    img.alt = "imagehere";
+                    img.style.maxHeight = '200px';
+                    img.style.objectFit = 'contain';
+                    card.appendChild(img);
+
+                    const hoverImg = document.createElement("img");
+                    hoverImg.src = values.hoverImage;
+                    hoverImg.className = "hover-img";
+                    hoverImg.alt = "hoverImage";
+                    hoverImg.style.maxHeight = '200px';
+                    hoverImg.style.objectFit = 'contain';
+                    hoverImg.style.display = 'none';
+                    hoverImg.style.position = 'absolute';
+                    hoverImg.style.top = '0';
+                    hoverImg.style.left = '0';
+                    hoverImg.style.right = '0';
+                    hoverImg.style.bottom = '0';
+                    card.appendChild(hoverImg);
+
+                    const cardBody = document.createElement("div");
+                    cardBody.className = "card-body";
+                    card.appendChild(cardBody);
+
+                    const title = document.createElement("h5");
+                    title.className = "card-title";
+                    title.textContent = values.title.length > 20 ? values.title.slice(0, 20) + '...' : values.title;
+                    cardBody.appendChild(title);
+
+                    const description = document.createElement("p");
+                    description.className = "card-text";
+                    description.setAttribute("data-full-text", values.description);
+                    description.textContent = truncateText(values.description, 100);
+                    cardBody.appendChild(description);
+
+                    if (values.description.length > 100) {
+                        const readMoreBtn = document.createElement("button");
+                        readMoreBtn.className = "btn btn-link";
+                        readMoreBtn.textContent = "Read more";
+                        readMoreBtn.addEventListener("click", handleReadMore);
+                        cardBody.appendChild(readMoreBtn);
+                    }
+
+                    const addToCartBtn = document.createElement("button");
+                    addToCartBtn.className = "btn btn-primary";
+                    addToCartBtn.addEventListener("click", (event) => handleAddToCart(event, values.id));
+                    addToCartBtn.innerHTML = '&#8377;' + values.price + ' Add to Cart';
+                    cardBody.appendChild(addToCartBtn);
+
+                    container.appendChild(card);
+                });
+            };
+
+            await fakestore();
+        });
+    </script>
+    <footer class="footer bg-dark text-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" style="text-align: left;">
+                    <h2>Contact Us</h2>
+                    <p>Email: harshitsharma182021@gmail.com</p>
+                    <p>Phone: 923456324</p>
+                </div>
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <a href="https://www.instagram.com/lavanpvt?igsh=MWN4Nmk2bHNocGZ6Mw==" target="_blank" rel="noopener noreferrer" class="text-light me-3">
+                        <span class="fa fa-instagram fa-2x"></span>
+                    </a>
+                    <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="text-light">
+                        <span class="fa fa-facebook-square fa-2x"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
